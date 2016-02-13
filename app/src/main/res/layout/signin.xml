@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/SignIn"
+    android:background="@color/Heading_color"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="@dimen/SignInWidth"
+        android:layout_height="wrap_content"
+        android:text="@string/singinHeading"
+        android:textSize="20sp"
+
+       />
+
+    <EditText
+        android:id="@+id/Username"
+        android:layout_width="@dimen/SignInWidth"
+        android:layout_height="wrap_content"
+        android:hint="@string/Username"
+        android:inputType="text"
+        />
+
+    <EditText
+        android:id="@+id/Contact_no"
+        android:layout_width="@dimen/SignInWidth"
+        android:layout_height="wrap_content"
+        android:hint="@string/ContactNumber"
+        android:inputType="number"/>
+
+    <LinearLayout
+        android:layout_width="@dimen/SignInWidth"
+        android:layout_height="wrap_content"
+        >
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/SignIn"
+            android:onClick="onSignInClick"
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/Cancel"
+            android:onClick="onCancelClick"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

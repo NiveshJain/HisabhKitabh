@@ -1,0 +1,127 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/acitivity_home"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".HomeActivity"
+    android:orientation="vertical"
+    android:background="#80DEEA">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_face_black_24dp"
+            android:scaleType="center"
+            android:background="#E0E0E0"
+            />
+
+        <TextView
+
+            android:id="@+id/username_home"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="@dimen/Username"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:gravity="center"
+            android:background="#B9F6CA"
+            />
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/amount"
+        android:textSize="25sp"/>
+
+    <EditText
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:inputType="numberDecimal"
+        android:hint="0.00"
+        />
+   </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Description"
+        android:textSize="25sp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:weightSum="1">
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/distribute"
+        android:textSize="20sp"/>
+
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:dropDownSelector="#9CCC65"
+            android:dropDownWidth="wrap_content">
+
+        </Spinner>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/among"
+            android:textSize="20sp"
+            />
+
+        <Button
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/listbutton"
+            android:textSize="20sp"
+            android:background="#E0E0E0"
+            android:textStyle="bold"
+            android:onClick="showList"/>
+
+    </LinearLayout>
+</LinearLayout>

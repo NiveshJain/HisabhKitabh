@@ -1,72 +1,53 @@
 package com.example.hisabhkitabh;
 
-import android.content.Intent;
+import android.annotation.TargetApi;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends AppCompatActivity{
 
 
     SharedPreferences prefs = null;
+    private android.support.v7.widget.Toolbar toolbar ;
+     static android.app.ActionBar actionBar ;
 
-    private  static String  firstuser = null;
+    private  static String appOwner_name = null;
     private  static String contact_no = null;
 
     private static  int SIGN_IN_REQUEST_CODE = 0;
 
+    private static final int NUM_PAGES  = 3 ;
+    private ViewPager mViewPager;
+    private PagerAdapter mPagerAdapter;
+
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        prefs =  getSharedPreferences("com.example.hisabhkitabh",MODE_PRIVATE);
-        // Determines if the app is ran for the first time
-        if (prefs.getBoolean("newInstallation", true)) {
+        toolbar =  (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
 
-            startActivityForResult(new Intent(this, SignInActivity.class),SIGN_IN_REQUEST_CODE );
+        mViewPager = (ViewPager) findViewById(R.id.pager);
 
-            prefs.edit().putBoolean("newInstallation", false).commit();
+        mPagerAdapter = new FragmentSlidePagerAdapter(getSupportFragmentManager());
 
-
-        }
-
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter arrayAdapter = ArrayAdapter.createFromResource(this,R.array.distribution,android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-
+        mViewPager.setAdapter(mPagerAdapter);
        }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(requestCode== SIGN_IN_REQUEST_CODE){
-            if(resultCode == RESULT_OK){
-                firstuser =  data.getStringExtra("name");
-                 contact_no = data.getStringExtra("contact_no");
-                ( (TextView) findViewById(R.id.username_home)).setText(firstuser);
-
-                //new Dbtranc().doInBackground(firstuser,contact_no,getApplicationContext());
-            }
-            else
-                this.finish();
-        }
 
 
-    }
-
-
-    public void showList (View namesView) {
-
-
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -88,7 +69,25 @@ public class HomeActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-}
+    public static class FragmentSlidePagerAdapter extends FragmentPagerAdapter {
+
+        public FragmentSlidePagerAdapter ( FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            return new ContactsListFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 0;
+        }
+    }
+
+   }
 
 
 

@@ -3,14 +3,16 @@
     xmlns:andriod="http://schemas.android.com/apk/res-auto"
     package="com.example.hisabhkitabh">
 
+<uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.NoActionBar">
 
-                <activity
+
+        <activity
 
             android:name="com.example.hisabhkitabh.HomeActivity"
             android:label="@string/app_name"
@@ -28,9 +30,8 @@
                     
         </activity>
 
-        <activity android:name="SignInActivity" >
+        <activity android:name="SignInActivity"/>
 
-        </activity>
     </application>
 
 </manifest>

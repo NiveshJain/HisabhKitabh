@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/action_bar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="50dp" android:background="@color/appbar_color"
+    android:weightSum="1">
+
+    <ImageView
+        android:padding="0dp"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/gold_coins"
+        android:layout_gravity="left"
+        android:layout_marginRight="10dp"/>
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/android_plus"
+        android:paddingLeft="80dp"/>
+
+</LinearLayout>

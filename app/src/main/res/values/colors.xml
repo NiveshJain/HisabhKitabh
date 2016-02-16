@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="dialogheadingcolour">#90CAF9</color>
-    <color name="Heading_color">#80CBC4</color>
+    <color name="ThemeColor">#80CBC4</color>
+    <color name="appbar_color">#81BEF7</color>
 
 </resources>

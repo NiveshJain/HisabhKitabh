@@ -20,6 +20,7 @@
     <string name="singinHeading">PLEASE SIGN IN</string>
     <string name="Search">Search Here</string>
     <string name="closeApplication_intent">com.example.hisabhkitabh.closeApplication</string>
+    <string name="defaultbill">0.00</string>
 
 
     <string-array name="distribution">

@@ -3,21 +3,20 @@
     android:id="@+id/action_bar"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="50dp" android:background="@color/appbar_color"
-    android:weightSum="1">
+    android:layout_height="100dp" android:background="@color/appbar_color"
+    >
 
     <ImageView
-        android:padding="0dp"
         android:layout_width="30dp"
         android:layout_height="match_parent"
-        android:src="@drawable/gold_coins"
-        android:layout_gravity="left"
+        android:src="@drawable/wallet"
+        android:layout_gravity="end"
         android:layout_marginRight="10dp"/>
 
     <ImageView
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/android_plus"
-        android:paddingLeft="80dp"/>
+        android:layout_marginLeft="190dp" />
 
 </LinearLayout>

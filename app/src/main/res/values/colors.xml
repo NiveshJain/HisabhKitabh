@@ -3,5 +3,7 @@
     <color name="dialogheadingcolour">#90CAF9</color>
     <color name="ThemeColor">#80CBC4</color>
     <color name="appbar_color">#81BEF7</color>
+    <color name="black_textColor">#000000</color>
+    <color name="white">#FFFFFF</color>
 
 </resources>

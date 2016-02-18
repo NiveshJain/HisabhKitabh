@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:id="@+id/list_layout"
+    android:layout_height="wrap_content"
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -27,16 +28,17 @@
             android:layout_width="wrap_content"
             android:singleLine="true"
             android:layout_gravity="right"
-            android:layout_height="wrap_content"/>
+            android:layout_height="43dp"/>
 
     </FrameLayout>
 
 
-
     <ListView
-        android:layout_below="@+id/frag"
+
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/contacts_list"/>
+        android:id="@+id/list"
+        android:layout_below="@+id/frag" />
 
 </RelativeLayout>

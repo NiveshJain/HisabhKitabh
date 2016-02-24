@@ -5,40 +5,37 @@
     android:layout_height="wrap_content"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#5b74a8"
-        android:id="@+id/frag">
+    <!-->   <FrameLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="#5b74a8"
+           android:id="@+id/frag">
 
-        <TextView
-            android:id="@+id/srchHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/Search"
-            android:textSize="16sp"
-            android:textColor="#000"
-            android:layout_gravity="center" />
+              <TextView
+                  android:id="@+id/srchHint"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:hint="@string/Search"
+                  android:textSize="16sp"
+                  android:textColor="#000"
+                  android:layout_gravity="center" />
 
-        <SearchView
-            android:background="#5b74a8"
-            android:padding="8dp"
-            android:id="@+id/searchView"
-            android:drawableLeft="@android:drawable/ic_menu_search"
-            android:layout_width="wrap_content"
-            android:singleLine="true"
-            android:layout_gravity="right"
-            android:layout_height="43dp"/>
+              <SearchView
+                  android:background="#5b74a8"
+                  android:padding="8dp"
+                  android:id="@+id/searchView"
+                  android:drawableLeft="@android:drawable/ic_menu_search"
+                  android:layout_width="wrap_content"
+                  android:singleLine="true"
+                  android:layout_gravity="right"
+                  android:layout_height="43dp"/>
 
-    </FrameLayout>
+    </FrameLayout> <-->
+<ListView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/list"
+    android:background="@color/white">
 
-
-    <ListView
-
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/list"
-        android:layout_below="@+id/frag" />
-
+</ListView>
 </RelativeLayout>

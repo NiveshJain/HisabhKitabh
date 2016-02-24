@@ -5,5 +5,6 @@
     <color name="appbar_color">#81BEF7</color>
     <color name="black_textColor">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="darkblue">#0D47A1</color>
 
 </resources>

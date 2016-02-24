@@ -1,23 +1,32 @@
-package com.example.hisabhkitabh;
+package com.example.hisabhkitabh.activity;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.example.hisabhkitabh.R;
+import com.example.hisabhkitabh.DAO.Contract;
+import com.example.hisabhkitabh.DAO.DBHelper;
+import com.example.hisabhkitabh.fragment.ContactsListFragment;
+import com.example.hisabhkitabh.fragment.GroupListFragment;
+import com.example.hisabhkitabh.fragment.ReportFragment;
 
 
 public class HomeActivity extends AppCompatActivity{
@@ -46,8 +55,6 @@ public class HomeActivity extends AppCompatActivity{
 
         setupActionBar();
 
-
-
          mViewPager = (ViewPager) findViewById(R.id.pager);
          mPagerAdapter = new FragmentSlidePagerAdapter(getSupportFragmentManager());
          mViewPager.setAdapter(mPagerAdapter);
@@ -63,6 +70,7 @@ public class HomeActivity extends AppCompatActivity{
         tabLayout.addTab(tabLayout.newTab().setText("Reports"));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -86,6 +94,7 @@ public class HomeActivity extends AppCompatActivity{
     private void  setupActionBar (){
 
         ActionBar actionBar =  getSupportActionBar();
+        assert actionBar != null;
         actionBar.setCustomView(R.layout.actionbar_layout);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -125,15 +134,12 @@ public class HomeActivity extends AppCompatActivity{
 
             switch (position){
                 case 0:
-                    ContactsListFragment contactsListFragment = new ContactsListFragment();
 
-                    return contactsListFragment;
+                    return new ContactsListFragment ();
                 case 1:
-                    GroupListFragment groupListFragment = new GroupListFragment();
-                    return groupListFragment;
+                   return new GroupListFragment();
                 case 2:
-                    ReportFragment reportFragment = new ReportFragment();
-                    return reportFragment;
+                    return new ReportFragment();
                 default:
                     return null;
             }
@@ -145,62 +151,71 @@ public class HomeActivity extends AppCompatActivity{
         }
     }
 
+    public  class Contacts extends AsyncTask<Activity ,Void, String []> {
 
-    public static class ContactsListFragment extends Fragment {
+        private DBHelper database  ;
+        private SQLiteDatabase db;
+        private FragmentActivity mactivity;
 
-        public ContactsListFragment () {}
+        public Contacts(FragmentActivity activity){
+            mactivity = activity;
 
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-            View view =  inflater.inflate(R.layout.contacts_list,container,false);
-
-            return  view;
         }
 
         @Override
-        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
+        protected String [] doInBackground(  Activity...  params) {
 
-            String [] names = {"Nivesh","Shashank","Ratnesh","Suyash","Sangeet","Yash","Sourabh","Krati","Kapil"};
+            database = new DBHelper(params[0]);
 
-            ListView listview =  (ListView)  getActivity().findViewById(R.id.list);
-
-            ArrayAdapter adapter = new ArrayAdapter<String> (this.getActivity(),R.layout.contact_item_layout,R.id.name,names);
-            listview.setAdapter(adapter);
-
-            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            db = database.getReadableDatabase();
 
 
+            Cursor cursor = db.rawQuery("select " + Contract.Users.COLUMN_FIRST_NAME + " from " + Contract.Users.TABLE_NAME, null);
+
+            String [] names = new String [cursor.getCount()] ;
+            if (cursor.getCount()== 0){
+                cursor.close();
+                db.close();
+                return null;
+            }
+            else
+            {
+                int count =  cursor.getCount();
+
+                if(cursor.moveToFirst()) {
+                    do {
+                        names[cursor.getPosition()] = cursor.getString(cursor.getColumnIndex(Contract.Users.COLUMN_FIRST_NAME));
+                    } while (cursor.moveToNext());
                 }
-            });
+                cursor.close();
+                db.close();
+            }
+            return  names;
         }
-    }
 
-    public  static  class GroupListFragment extends Fragment {
-
-        public GroupListFragment () {}
-        @Nullable
         @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.groupcontactslist_layout,container,false);
+        protected void onPostExecute(String[] strings) {
+            super.onPostExecute(strings);
+
+            ListView listview =  (ListView) HomeActivity.this.findViewById(R.id.list);
+
+            if(strings != null) {
+                ArrayAdapter adapter = new ArrayAdapter<String>(mactivity, R.layout.contact_item_layout, R.id.name, strings);
+                listview.setAdapter(adapter);
+                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    }
+                });
+            }
+            else {
+                listview.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
-    public  static  class ReportFragment extends Fragment {
 
-        public  ReportFragment () {}
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.report_layout,container,false);
-        }
-    }
-
-   }
+}
 
 
 

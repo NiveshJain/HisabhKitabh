@@ -1,4 +1,4 @@
-package com.example.hisabhkitabh.dbmodel;
+package com.example.hisabhkitabh.DAO;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -16,11 +16,11 @@ public class Contract  {
     //table name for users
     public static final String PATH_USERS = "users";
 
-    //table name for participants involved in transaction
-    public static final String PATH_TRANSACTION_PARTICIPANTS = "transaction_participants";
+    //table name for participants involved in event
+    public static final String PATH_EVENT_PARTICIPANTS = "event_participants";
 
-    //table name for details associtated with transaction
-    public static final String PATH_TRANSACTION = "transaction" ;
+    //table name for details associtated with event
+    public static final String PATH_EVENT = "event" ;
 
 
     // Class representing Table users
@@ -41,15 +41,15 @@ public class Contract  {
 
     }
 
-    // Class representing Table transaction_participants
-    public static final class TransactionPraticipants implements BaseColumns {
+    // Class representing Table event_participants
+    public static final class EventPraticipants implements BaseColumns {
 
         //content uri for table users
-        public  static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRANSACTION_PARTICIPANTS).build();
+        public  static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_EVENT_PARTICIPANTS).build();
 
-        public  static final String TABLE_NAME = "transaction_participants";
+        public  static final String TABLE_NAME = "event_participants";
 
-         public  static final String COLUMN_TID = "transaction_id";
+         public  static final String COLUMN_TID = "event_id";
 
         public  static final String COLUMN_FROM = "_from";
 
@@ -60,15 +60,15 @@ public class Contract  {
     }
 
 
-    // Class representing Table transaction_participants
-    public static final class Transaction implements BaseColumns {
+    // Class representing Table event_participants
+    public static final class Event implements BaseColumns {
 
-        //content uri for table transaction
-        public  static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRANSACTION).build();
+        //content uri for table event
+        public  static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_EVENT).build();
 
-        public  static final String TABLE_NAME = "transaction";
+        public  static final String TABLE_NAME = "event";
 
-        public  static final String COLUMN_TID = "transaction_id";
+        public  static final String COLUMN_TID = "event_id";
 
         public  static final String COLUMN_DATE = "date";
 

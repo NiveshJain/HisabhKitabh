@@ -3,6 +3,10 @@
 
     android:hint="@string/Search"
     android:label="@string/app_name"
+    android:searchSuggestAuthority="com.android.contacts"
+    android:searchSuggestIntentAction="android.provider.Contacts.SEARCH_SUGGESTION_CLICKED"
+    android:searchSuggestIntentData="content://com.android.contacts/contacts/lookup"
     >
+
 
 </searchable>

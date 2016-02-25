@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/list_layout"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <!-->   <FrameLayout
@@ -34,8 +34,14 @@
 <ListView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/list"
+    android:id="@android:id/list"
     android:background="@color/white">
-
 </ListView>
+
+    <TextView android:id="@id/android:empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Message"
+        android:textSize="80sp"/>
+
 </RelativeLayout>

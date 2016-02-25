@@ -10,6 +10,9 @@ public class User {
     private String lastName;
     private String contactNumber;
 
+    public User() {
+    }
+
     public User(int userId, String firstName, String lastName, String contactNumber) {
         this.userId = userId;
         this.firstName = firstName;
@@ -48,4 +51,6 @@ public class User {
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
+
+
 }

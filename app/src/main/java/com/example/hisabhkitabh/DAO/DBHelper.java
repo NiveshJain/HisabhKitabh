@@ -11,8 +11,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "hisabh_kitabh.db";
+    private  static DBHelper sDBHelper ;
 
-    public DBHelper (Context context){
+    public static synchronized DBHelper getInstance (Context context){
+
+        if(sDBHelper == null) {
+            sDBHelper = new DBHelper(context.getApplicationContext());
+        }
+        return sDBHelper;
+    }
+
+    private DBHelper (Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
 
@@ -32,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 Contract.EventPraticipants.COLUMN_TID + " INTEGER," +
                 Contract.EventPraticipants.COLUMN_FROM + " TEXT NOT NULL," +
                 Contract.EventPraticipants.COLUMN_TO + " TEXT NOT NULL," +
-                Contract.EventPraticipants.COLUMN_AMOUNT + " INTEGER NOT NULL, " +
+                Contract.EventPraticipants.COLUMN_AMOUNT + " REAL NOT NULL, " +
                 " FOREIGN KEY" +"(" + Contract.EventPraticipants.COLUMN_TID + ")" +
                 " REFERENCES "  + Contract.Event.TABLE_NAME +"(" + Contract.Event._ID +
                 "), " + " FOREIGN KEY " + "(" + Contract.EventPraticipants.COLUMN_FROM + ")" +

@@ -1,14 +1,10 @@
 package com.example.hisabhkitabh.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,13 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.hisabhkitabh.R;
-import com.example.hisabhkitabh.DAO.Contract;
-import com.example.hisabhkitabh.DAO.DBHelper;
 import com.example.hisabhkitabh.fragment.ContactsListFragment;
 import com.example.hisabhkitabh.fragment.GroupListFragment;
 import com.example.hisabhkitabh.fragment.ReportFragment;
@@ -122,6 +113,10 @@ public class HomeActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    public void addNewTransaction(View view) {
+        startActivity(new Intent("com.example.hisabhkitabh.action.ADD_TRANSACTION"));
+    }
+
 
     public static class FragmentSlidePagerAdapter extends FragmentStatePagerAdapter {
 
@@ -134,7 +129,6 @@ public class HomeActivity extends AppCompatActivity{
 
             switch (position){
                 case 0:
-
                     return new ContactsListFragment ();
                 case 1:
                    return new GroupListFragment();
@@ -151,68 +145,7 @@ public class HomeActivity extends AppCompatActivity{
         }
     }
 
-    public  class Contacts extends AsyncTask<Activity ,Void, String []> {
 
-        private DBHelper database  ;
-        private SQLiteDatabase db;
-        private FragmentActivity mactivity;
-
-        public Contacts(FragmentActivity activity){
-            mactivity = activity;
-
-        }
-
-        @Override
-        protected String [] doInBackground(  Activity...  params) {
-
-            database = new DBHelper(params[0]);
-
-            db = database.getReadableDatabase();
-
-
-            Cursor cursor = db.rawQuery("select " + Contract.Users.COLUMN_FIRST_NAME + " from " + Contract.Users.TABLE_NAME, null);
-
-            String [] names = new String [cursor.getCount()] ;
-            if (cursor.getCount()== 0){
-                cursor.close();
-                db.close();
-                return null;
-            }
-            else
-            {
-                int count =  cursor.getCount();
-
-                if(cursor.moveToFirst()) {
-                    do {
-                        names[cursor.getPosition()] = cursor.getString(cursor.getColumnIndex(Contract.Users.COLUMN_FIRST_NAME));
-                    } while (cursor.moveToNext());
-                }
-                cursor.close();
-                db.close();
-            }
-            return  names;
-        }
-
-        @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
-
-            ListView listview =  (ListView) HomeActivity.this.findViewById(R.id.list);
-
-            if(strings != null) {
-                ArrayAdapter adapter = new ArrayAdapter<String>(mactivity, R.layout.contact_item_layout, R.id.name, strings);
-                listview.setAdapter(adapter);
-                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    }
-                });
-            }
-            else {
-                listview.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
 
 
 }

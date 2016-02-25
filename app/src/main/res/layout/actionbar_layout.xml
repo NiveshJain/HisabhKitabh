@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/android_plus"
-        android:layout_marginLeft="190dp" />
+        android:layout_marginLeft="190dp"
+        android:onClick="addNewTransaction"/>
 
 </LinearLayout>

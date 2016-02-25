@@ -25,12 +25,13 @@ public class HomeActivity extends AppCompatActivity{
 
     SharedPreferences prefs = null;
     private android.support.v7.widget.Toolbar toolbar ;
-     static android.app.ActionBar actionBar ;
+    private static android.app.ActionBar actionBar ;
 
     private  static String appOwner_name = null;
     private  static String contact_no = null;
 
     private static  int SIGN_IN_REQUEST_CODE = 0;
+    private static final String CUSTOM_ACTION = "com.example.hisabhkitabh.action.ADD_TRANSACTION";
 
     private static final int NUM_TABS = 3 ;
     private ViewPager mViewPager;
@@ -113,8 +114,12 @@ public class HomeActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
+
     public void addNewTransaction(View view) {
-        startActivity(new Intent("com.example.hisabhkitabh.action.ADD_TRANSACTION"));
+
+
+        startActivity(new Intent().setAction(CUSTOM_ACTION));
+
     }
 
 

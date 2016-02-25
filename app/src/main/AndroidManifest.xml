@@ -48,7 +48,7 @@
         <activity android:name="com.example.hisabhkitabh.activity.NewTransactionActivity">
             <intent-filter>
                 <action android:name="com.example.hisabhkitabh.action.ADD_TRANSACTION"/>
-
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
 
         </activity>

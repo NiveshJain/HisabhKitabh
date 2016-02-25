@@ -24,6 +24,7 @@
     <string name="creategroup">Create Group</string>
     <string name="addfriend_menu">Add Friend</string>
     <string name="Message">No Contacts Yet</string>
+    <string name="savetransaction">save</string>
 
 
     <string-array name="distribution">

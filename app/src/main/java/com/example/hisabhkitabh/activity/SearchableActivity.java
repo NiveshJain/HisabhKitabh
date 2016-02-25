@@ -2,6 +2,8 @@ package com.example.hisabhkitabh.activity;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -31,13 +33,15 @@ public class SearchableActivity extends ListActivity implements LoaderManager.Lo
 
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+       SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView)findViewById(R.id.searchview);
+        SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
+        searchView.setSearchableInfo(searchableInfo);
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             searchContact(query);
         }
-
-
 
     }
 

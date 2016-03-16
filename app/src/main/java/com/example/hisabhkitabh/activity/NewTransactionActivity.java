@@ -27,7 +27,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newtransaction_layout);
 
-        
+
 
          Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.transaction_toolbar);
         setSupportActionBar(toolbar);

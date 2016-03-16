@@ -52,7 +52,6 @@ public class HomeActivity extends AppCompatActivity{
          mViewPager.setAdapter(mPagerAdapter);
          mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(setTabs()));
 
-
        }
 
     private TabLayout setTabs() {

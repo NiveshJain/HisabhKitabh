@@ -24,11 +24,10 @@ import java.util.ArrayList;
 public class ContactsListFragment extends ListFragment {
 
     private UserDAO mUsersDAO;
-    private Activity mActivity ;
+    private Activity mActivity;
 
 
-
-    public ContactsListFragment (){
+    public ContactsListFragment() {
 
     }
 
@@ -36,9 +35,9 @@ public class ContactsListFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.contacts_list,container,false);
+        return inflater.inflate(R.layout.contacts_list, container, false);
 
-         }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -46,40 +45,40 @@ public class ContactsListFragment extends ListFragment {
         new Contacts().execute(getActivity());
     }
 
-    public class Contacts extends AsyncTask<Activity,Void, ArrayList<User>> {
+
+
+    public class Contacts extends AsyncTask<Activity, Void, ArrayList<User>> {
 
 
         @Override
-        protected ArrayList<User> doInBackground(Activity...  params) {
+        protected ArrayList<User> doInBackground(Activity... params) {
 
 
-           if (params[0] == null){
-               Log.e("NULL**", "null arraylist");
-               return null;
-           }
-
-            else {
-               mUsersDAO = new UserDAO();
-               return mUsersDAO.getAllUsers(params[0]);
-           }
+            if (params[0] == null) {
+                Log.e("NULL**", "null arraylist");
+                return null;
+            } else {
+                mUsersDAO = new UserDAO();
+                return mUsersDAO.getAllUsers(params[0]);
+            }
 
         }
 
         @Override
         protected void onPostExecute(ArrayList<User> users) {
             super.onPostExecute(users);
+            if (!users.isEmpty()) {
+               User [] names = users.toArray( new User [users.size()]);
+                ArrayAdapter arrayAdapter = new ArrayAdapter<User>(getContext(), R.layout.contact_item_layout, R.id.name, names);
+                setListAdapter(arrayAdapter);
+            } else {
 
-            String [] names = new String [users.size()] ;
-            int i =0;
 
-            for (User user : users) {
-                names[i]= user.getFirstName();
-                i++;
             }
-            ArrayAdapter arrayAdapter = new ArrayAdapter <String>(getContext(),R.layout.contact_item_layout,R.id.name, names);
-            setListAdapter(arrayAdapter);
         }
     }
+
+
 }
 
 

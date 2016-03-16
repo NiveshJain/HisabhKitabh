@@ -25,31 +25,23 @@
 
             </intent-filter>
 
-                    <intent-filter>
-                        <action android:name="com.example.hisabhkitabh.closeApplication"/>
-                    </intent-filter>
+
                     
         </activity>
 
         <activity android:name="com.example.hisabhkitabh.extra.SignInActivity"/>
 
-        <activity android:name="com.example.hisabhkitabh.activity.SearchableActivity">
 
-            <intent-filter >
-                <action android:name="android.intent.action.SEARCH"/>
-            </intent-filter>
-
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable">
-            </meta-data>
-
-        </activity>
 
         <activity android:name="com.example.hisabhkitabh.activity.NewTransactionActivity">
+
             <intent-filter>
                 <action android:name="com.example.hisabhkitabh.action.ADD_TRANSACTION"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+
+            <meta-data android:name="android.app.default_searchable"
+                android:value="com.example.hisabhkitabh.activity.SearchableActivity" />
 
         </activity>
 

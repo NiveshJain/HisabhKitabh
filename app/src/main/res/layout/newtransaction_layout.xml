@@ -14,12 +14,11 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-
-<android.support.v7.widget.SearchView
-    android:id="@+id/searchview"
+<AutoCompleteTextView
+    android:id="@+id/searchContactsTextView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-</android.support.v7.widget.SearchView>
+    android:layout_height="40dp"
+    />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,6 +26,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:src="@drawable/bill_icon"
             android:layout_width="110dp"
             android:layout_height="100dp" />
 
@@ -36,13 +36,17 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/description"
                 android:hint="@string/Description"
+                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:drawableEnd="@drawable/camera_icon"
-                android:drawableRight="@drawable/camera_icon"/>
+                android:drawableRight="@drawable/camera_icon"
+                />
 
             <EditText
+                android:inputType="numberDecimal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/defaultbill"/>

@@ -7,6 +7,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.widget.AutoCompleteTextView;
 
@@ -19,6 +21,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
         android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int CONTACTS_LIST_LOADER_ID = 0;
+    private static final int FILTERED_CONTACTS_LIST_LOADER_ID = 1;
 
     SimpleCursorAdapter mSimpleCursorAdapter ;
 
@@ -26,8 +29,6 @@ public class NewTransactionActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newtransaction_layout);
-
-
 
          Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.transaction_toolbar);
         setSupportActionBar(toolbar);
@@ -38,6 +39,8 @@ public class NewTransactionActivity extends AppCompatActivity implements
         searchContactsTextView.setHint("Enter names");
         final String [] COLUMNS_PROJECTION = new  String  [] {ContactsContract.Contacts.DISPLAY_NAME,ContactsContract.Contacts._ID} ;
 
+         searchContactsTextView.getOnItemClickListener();
+
       mSimpleCursorAdapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_1,
                 null,
@@ -45,10 +48,44 @@ public class NewTransactionActivity extends AppCompatActivity implements
                 new int [] {android.R.id.text1},
                 0);
 
+        mSimpleCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
+            @Override
+            public CharSequence convertToString(Cursor cursor) {
+               String name =   cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                return name;
+            }
+        });
+
           searchContactsTextView.setAdapter(mSimpleCursorAdapter);
+          getSupportLoaderManager().initLoader(CONTACTS_LIST_LOADER_ID, null, this);
+
+          searchContactsTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
 
 
-         getSupportLoaderManager().initLoader(CONTACTS_LIST_LOADER_ID, null, this);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                filterCursor(s);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+            }
+        });
+
+    }
+
+    private void filterCursor(CharSequence query ) {
+        Bundle bundle = new Bundle ();
+        bundle.putCharSequence("newQuery", query);
+        getSupportLoaderManager().restartLoader(FILTERED_CONTACTS_LIST_LOADER_ID, bundle, this);
 
     }
 
@@ -71,11 +108,13 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
         switch (id) {
 
-            case (CONTACTS_LIST_LOADER_ID):
+            case (FILTERED_CONTACTS_LIST_LOADER_ID) :
+                String query = args.getCharSequence("newQuery").toString();
+                String select =  ContactsContract.Contacts.DISPLAY_NAME + " LIKE +'" + query +"%'";
                 return new CursorLoader(this,
                         ContactsContract.Contacts.CONTENT_URI,
                         CONTACTS_SUMMARY_PROJECTION,
-                        null,
+                        select,
                         null,
                         ContactsContract.Contacts.DISPLAY_NAME + " ASC");
 

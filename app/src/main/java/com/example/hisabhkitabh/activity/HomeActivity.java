@@ -43,11 +43,12 @@ public class HomeActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-         prefs = getSharedPreferences("com.example.hisabhkitabh.activity",MODE_PRIVATE);
+         prefs = getSharedPreferences("com.example.hisabhkitabh.newInstallation",MODE_PRIVATE);
 
         setContentView(R.layout.activity_home);
         toolbar =  (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         setupActionBar();
 
@@ -102,8 +103,8 @@ public class HomeActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
 
-        if(prefs.getBoolean("com.example.hisabhkitabh.action.ADD_TRANSACTION",true)){
-
+        if(prefs.getBoolean("com.example.hisabhkitabh.newInstallation",true)){
+            prefs.edit().putBoolean("com.example.hisabhkitabh.newInstallation",false).apply();
             startActivityForResult(new Intent().setClass(getApplicationContext(), SignInActivity.class), SIGN_IN_REQUEST_CODE);
 
         }

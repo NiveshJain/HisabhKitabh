@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
 
 import com.example.hisabhkitabh.R;
 import com.example.hisabhkitabh.fragment.DateChooserFragment;
@@ -44,7 +43,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
          final AutoCompleteTextView searchContactsTextView = (AutoCompleteTextView) findViewById(R.id.searchContactsTextView);
          searchContactsTextView.setThreshold(2);
-        searchContactsTextView.setText("With you and:", TextView.BufferType.NORMAL);
+
 
         searchContactsTextView.setHint("Enter names");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -79,7 +78,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
         });
 
           searchContactsTextView.setAdapter(mSimpleCursorAdapter);
-          getSupportLoaderManager().initLoader(CONTACTS_LIST_LOADER_ID, null, this);
+          getSupportLoaderManager().initLoader(FILTERED_CONTACTS_LIST_LOADER_ID, null, this);
 
           searchContactsTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -90,9 +89,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 filterCursor(s);
-
             }
 
             @Override
@@ -108,7 +105,6 @@ public class NewTransactionActivity extends AppCompatActivity implements
         Bundle bundle = new Bundle ();
         bundle.putCharSequence("newQuery", query);
         getSupportLoaderManager().restartLoader(FILTERED_CONTACTS_LIST_LOADER_ID, bundle, this);
-
     }
 
 
@@ -131,12 +127,21 @@ public class NewTransactionActivity extends AppCompatActivity implements
         switch (id) {
 
             case (FILTERED_CONTACTS_LIST_LOADER_ID) :
-                String query = args.getCharSequence("newQuery").toString();
-                String select =  ContactsContract.Contacts.DISPLAY_NAME + " LIKE +'" + query +"%'";
+                if(args != null) {
+                    String query = args.getCharSequence("newQuery").toString();
+                    String select = ContactsContract.Contacts.DISPLAY_NAME + " LIKE +'" + query + "%'";
+                    return new CursorLoader(this,
+                            ContactsContract.Contacts.CONTENT_URI,
+                            CONTACTS_SUMMARY_PROJECTION,
+                            select,
+                            null,
+                            ContactsContract.Contacts.DISPLAY_NAME + " ASC");
+                }
+                else
                 return new CursorLoader(this,
                         ContactsContract.Contacts.CONTENT_URI,
                         CONTACTS_SUMMARY_PROJECTION,
-                        select,
+                        null,
                         null,
                         ContactsContract.Contacts.DISPLAY_NAME + " ASC");
 
@@ -154,7 +159,6 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
     @Override
     public void onLoaderReset(android.support.v4.content.Loader loader) {
-
         mSimpleCursorAdapter.swapCursor(null);
     }
 
@@ -166,6 +170,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
     }
 
     public void addTransaction(MenuItem item) {
+
 
 
     }

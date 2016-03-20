@@ -1,7 +1,9 @@
 package com.example.hisabhkitabh.DAO;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.hisabhkitabh.Model.User;
 
@@ -13,9 +15,15 @@ import java.util.ArrayList;
 public class UserDAO {
 
 
-    public void insertUser(User user){
+    public long insertUser(User user,Context context){
 
-        String insertUserQuery = "INSERT ";
+        ContentValues userValues = new ContentValues();
+        userValues.put(Contract.Users.COLUMN_FIRST_NAME,user.getFirstName());
+        userValues.put(Contract.Users.COLUMN_LAST_NAME,user.getLastName());
+        userValues.put(Contract.Users.COLUMN_CONTACT_NUMBER,user.getContactNumber());
+
+        SQLiteDatabase db =  DBHelper.getInstance(context).getWritableDatabase();
+        return db.insertWithOnConflict(Contract.Users.TABLE_NAME,null,userValues,SQLiteDatabase.CONFLICT_IGNORE);
 
     }
 
@@ -34,7 +42,7 @@ public class UserDAO {
                  //   user.setUserId(cursor.getInt(cursor.getColumnIndex(Contract.Users._ID)));
                     user.setFirstName(cursor.getString(cursor.getColumnIndex(Contract.Users.COLUMN_FIRST_NAME)));
                     user.setLastName(cursor.getString(cursor.getColumnIndex(Contract.Users.COLUMN_LAST_NAME)));
-                    user.setContactNumber(cursor.getString(cursor.getColumnIndex(Contract.Users.COLUMN_CONTACT_NUMBER)));
+                    user.setContactNumber(cursor.getLong(cursor.getColumnIndex(Contract.Users.COLUMN_CONTACT_NUMBER)));
                     userList.add(user);
                 } while (cursor.moveToNext());
             }
@@ -42,5 +50,7 @@ public class UserDAO {
 
         return userList;
     }
+
+
 
 }

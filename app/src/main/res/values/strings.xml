@@ -28,6 +28,7 @@
     <string name="pick_date">Choose Date</string>
     <string name="date_fragment_tag">dialogfragment</string>
     <string name="textOnACTV">With you and:</string>
+    <string name="DefaultMessage">With you and:</string>
 
 
     <string-array name="distribution">

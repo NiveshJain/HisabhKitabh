@@ -1,61 +1,77 @@
 package com.example.hisabhkitabh.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.hisabhkitabh.DAO.UserDAO;
+import com.example.hisabhkitabh.Model.User;
 import com.example.hisabhkitabh.R;
-import com.example.hisabhkitabh.Service.SignInDetailsService;
 
 /**
  * Created by LNJPC on 10-02-2016.
  */
 public class SignInActivity extends AppCompatActivity {
 
-
+private  ProgressDialog mProgressDialog ;
+    private static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signin);
+        mContext = this;
+        mProgressDialog = new ProgressDialog(this);
     }
 
     public void onSignInClick(View view) {
 
-
          Intent home_intent ;
 
-        EditText username = (EditText) (view.getRootView()).findViewById(R.id.Username);
+        showprogress();
 
-        String fullname =  username.getText().toString();
+        EditText username = (EditText) (view.getRootView()).findViewById(R.id.Username);
+        final String [] fullnameArray =  (username.getText().toString()).split(" ");
 
         EditText contact =  (EditText)(view.getRootView()).findViewById(R.id.Contact_no);
-        String number =  (contact.getText().toString().trim());
+        final long number =  Long.parseLong((contact.getText().toString().trim()));
 
-        home_intent = new Intent();
-        home_intent.putExtra("name",fullname);
-        home_intent.putExtra("contact_no", number);
+        home_intent = new Intent ();
+        home_intent.putExtra("fullname",fullnameArray);
+        home_intent.putExtra("number",number);
 
-        if(fullname != null && number.length()>9 ) {
+        if(fullnameArray != null && number >9 ) {
 
-            //IntentService for inserting User Details into the DB
-            Intent serviceIntent  = new Intent(getApplicationContext(),SignInDetailsService.class);
-            serviceIntent.putExtra("fullname",fullname);
-            serviceIntent.putExtra("number",Long.parseLong(number));
-            this.startService(serviceIntent);
-           SharedPreferences prefs = getSharedPreferences("com.example.hisabhkitabh.action.ADD_TRANSACTION",MODE_PRIVATE);
+
+            final User firstUser = new User(fullnameArray[0], fullnameArray[1], number);
+            final UserDAO userDAO = new UserDAO();
+            new Thread(new Runnable(){
+                @Override
+                public void run() {
+                    long rowId =   userDAO.insertUser(firstUser,mContext);
+                         mProgressDialog.dismiss();
+                    // implement the code for failure in insertion
+                }
+            }).start();
 
             //passing the result back to HomeActivity
             setResult(RESULT_OK, home_intent);
+            finish();
         }
         else {
             setResult(RESULT_CANCELED);
             finish();
         }
+    }
+
+    private void showprogress() {
+        mProgressDialog.setTitle("Signing In...");
+        mProgressDialog.show();
     }
 
 

@@ -8,13 +8,13 @@ public class User {
     private int userId;
     private String firstName;
     private String lastName;
-    private String contactNumber;
+    private long contactNumber;
 
     public User() {
     }
 
-    public User(int userId, String firstName, String lastName, String contactNumber) {
-        this.userId = userId;
+    public User( String firstName, String lastName, long contactNumber) {
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.contactNumber = contactNumber;
@@ -22,10 +22,6 @@ public class User {
 
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -44,11 +40,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getContactNumber() {
+    public long getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(String contactNumber) {
+    public void setContactNumber(long contactNumber) {
         this.contactNumber = contactNumber;
     }
 

@@ -27,10 +27,10 @@ public class HomeActivity extends AppCompatActivity{
     private android.support.v7.widget.Toolbar toolbar ;
     private static android.app.ActionBar actionBar ;
 
+    private  final int SIGN_IN_REQUEST_CODE = 0;
     private  static String appOwner_name = null;
     private  static String contact_no = null;
 
-    private static  int SIGN_IN_REQUEST_CODE = 0;
     private static final String CUSTOM_ACTION = "com.example.hisabhkitabh.action.ADD_TRANSACTION";
 
     private static final int NUM_TABS = 3 ;
@@ -38,9 +38,13 @@ public class HomeActivity extends AppCompatActivity{
     private FragmentSlidePagerAdapter  mPagerAdapter;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+         prefs = getSharedPreferences("com.example.hisabhkitabh.activity",MODE_PRIVATE);
+
         setContentView(R.layout.activity_home);
         toolbar =  (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,6 +93,29 @@ public class HomeActivity extends AppCompatActivity{
         actionBar.setCustomView(R.layout.actionbar_layout);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
+
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(prefs.getBoolean("com.example.hisabhkitabh.action.ADD_TRANSACTION",true)){
+
+            startActivityForResult(new Intent().setClass(getApplicationContext(), SignInActivity.class), SIGN_IN_REQUEST_CODE);
+
+        }
+    }
+
+    // Set the app User in the Database having user_id as 1
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+       if(requestCode == SIGN_IN_REQUEST_CODE)
+           if(resultCode == RESULT_OK){
+
+           }
 
     }
 

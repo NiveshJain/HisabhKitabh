@@ -6,7 +6,6 @@
 <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +13,6 @@
 
 
         <activity
-
             android:name="com.example.hisabhkitabh.activity.HomeActivity"
             android:label="@string/app_name"
                     android:launchMode="singleTop">
@@ -22,16 +20,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
 
-
             </intent-filter>
 
-
-                    
         </activity>
 
-        <activity android:name="com.example.hisabhkitabh.extra.SignInActivity"/>
+        <activity android:name="com.example.hisabhkitabh.activity.SignInActivity">
 
-
+            </activity>
 
         <activity android:name="com.example.hisabhkitabh.activity.NewTransactionActivity">
 
@@ -44,6 +39,16 @@
                 android:value="com.example.hisabhkitabh.activity.SearchableActivity" />
 
         </activity>
+
+        <service android:name=".Service.SignInDetailsService" android:exported="false"/>
+
+        <receiver android:name=".Receiver.ResponseReceiver">
+            <intent-filter >
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.example.hisabhkitabh.Receiver.BROADCAST_ACTION"/>
+            </intent-filter>
+
+        </receiver>
 
     </application>
 

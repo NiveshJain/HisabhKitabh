@@ -73,7 +73,6 @@ public class ContactsListFragment extends ListFragment {
                 setListAdapter(arrayAdapter);
             } else {
 
-
             }
         }
     }

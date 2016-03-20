@@ -2,6 +2,7 @@ package com.example.hisabhkitabh.activity;
 
 import android.app.DialogFragment;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.content.CursorLoader;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 
 import com.example.hisabhkitabh.R;
 import com.example.hisabhkitabh.fragment.DateChooserFragment;
@@ -26,24 +28,40 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
     private static final int CONTACTS_LIST_LOADER_ID = 0;
     private static final int FILTERED_CONTACTS_LIST_LOADER_ID = 1;
+    private static String name = "";
+
 
     SimpleCursorAdapter mSimpleCursorAdapter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.newtransaction_layout);
 
-         Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.transaction_toolbar);
+         Toolbar toolbar = (Toolbar) findViewById(R.id.transaction_toolbar);
         setSupportActionBar(toolbar);
 
-         AutoCompleteTextView searchContactsTextView = (AutoCompleteTextView) findViewById(R.id.searchContactsTextView);
+         final AutoCompleteTextView searchContactsTextView = (AutoCompleteTextView) findViewById(R.id.searchContactsTextView);
          searchContactsTextView.setThreshold(2);
+        searchContactsTextView.setText("With you and:", TextView.BufferType.NORMAL);
 
         searchContactsTextView.setHint("Enter names");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            searchContactsTextView.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                  name =   ((AutoCompleteTextView) findViewById(R.id.searchContactsTextView)).getText().toString();
+                    if (name !=null) {
+
+                    }
+                }
+            });
+        }
+
         final String [] COLUMNS_PROJECTION = new  String  [] {ContactsContract.Contacts.DISPLAY_NAME,ContactsContract.Contacts._ID} ;
 
-         searchContactsTextView.getOnItemClickListener();
+
 
       mSimpleCursorAdapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_1,
@@ -55,7 +73,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
         mSimpleCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
             @Override
             public CharSequence convertToString(Cursor cursor) {
-               String name =   cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                name =   cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 return name;
             }
         });
@@ -148,6 +166,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
     }
 
     public void addTransaction(MenuItem item) {
+
 
     }
 }

@@ -3,7 +3,7 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/SignIn"
-    android:background="@color/ThemeColor"
+    android:background="@color/appbar_color"
     android:gravity="center">
 
     <TextView
@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/Username"
         android:inputType="text"
+        android:drawableRight="@android:drawable/ic_dialog_info"
         />
 
     <EditText
@@ -27,7 +28,9 @@
         android:layout_width="@dimen/SignInWidth"
         android:layout_height="wrap_content"
         android:hint="@string/ContactNumber"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:drawableRight="@android:drawable/ic_dialog_info"
+        />
 
     <LinearLayout
         android:layout_width="@dimen/SignInWidth"

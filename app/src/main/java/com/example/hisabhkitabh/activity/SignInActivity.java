@@ -31,7 +31,7 @@ private  ProgressDialog mProgressDialog ;
 
     public void onSignInClick(View view) {
 
-         Intent home_intent ;
+        Intent home_intent ;
 
         showprogress();
 
@@ -54,7 +54,7 @@ private  ProgressDialog mProgressDialog ;
                 @Override
                 public void run() {
                     long rowId =   userDAO.insertUser(firstUser,mContext);
-                         mProgressDialog.dismiss();
+
                     // implement the code for failure in insertion
                 }
             }).start();
@@ -82,5 +82,11 @@ private  ProgressDialog mProgressDialog ;
         exitToast.show();
          finish();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mProgressDialog.dismiss();
     }
 }

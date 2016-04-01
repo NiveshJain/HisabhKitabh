@@ -1,6 +1,7 @@
 package com.example.hisabhkitabh.activity;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,8 +15,13 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 
+import com.example.hisabhkitabh.DAO.UserDAO;
+import com.example.hisabhkitabh.Model.User;
 import com.example.hisabhkitabh.R;
 import com.example.hisabhkitabh.fragment.DateChooserFragment;
 
@@ -25,6 +31,7 @@ import com.example.hisabhkitabh.fragment.DateChooserFragment;
 public class NewTransactionActivity extends AppCompatActivity implements
         android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static Context mContext;
     private static final int CONTACTS_LIST_LOADER_ID = 0;
     private static final int FILTERED_CONTACTS_LIST_LOADER_ID = 1;
     private static String name = "";
@@ -35,7 +42,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mContext = this;
         setContentView(R.layout.newtransaction_layout);
 
          Toolbar toolbar = (Toolbar) findViewById(R.id.transaction_toolbar);
@@ -50,7 +57,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
             searchContactsTextView.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-                  name =   ((AutoCompleteTextView) findViewById(R.id.searchContactsTextView)).getText().toString();
+                  name =  ((AutoCompleteTextView) findViewById(R.id.searchContactsTextView)).getText().toString();
                     if (name !=null) {
 
                     }
@@ -58,16 +65,45 @@ public class NewTransactionActivity extends AppCompatActivity implements
             });
         }
 
-        final String [] COLUMNS_PROJECTION = new  String  [] {ContactsContract.Contacts.DISPLAY_NAME,ContactsContract.Contacts._ID} ;
+        //getting the name of the person with whom our App user transacted
+        final String[] secondUser = new String[] {""};
+        searchContactsTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                secondUser[0] = (String) mSimpleCursorAdapter.getItem(position);
+            }
+        });
+
+        // Getting our App first user info.
+        final User[] firstUser = new User[1];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                 firstUser[0] = new UserDAO().getFirstUser(mContext);
+            }
+        }).start();
+
+        //Initializig Spinner
+
+       ArrayAdapter<String> arrayAdapter =   new ArrayAdapter<String>(mContext,
+            android.R.layout.simple_expandable_list_item_1,
+            android.R.id.text1,
+            new String [] {"You Owe",secondUser[0],"Split Equally"});
+
+        ((Spinner)findViewById(R.id.spinner)).setAdapter(arrayAdapter);
+
+        final String [] COLUMNS_PROJECTION = new  String  [] {ContactsContract.Contacts.DISPLAY_NAME,
+                ContactsContract.Contacts._ID} ;
 
 
 
       mSimpleCursorAdapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_1,
+                android.R.layout.simple_list_item_2,
                 null,
                 COLUMNS_PROJECTION,
-                new int [] {android.R.id.text1},
+                new int [] {android.R.id.text1,android.R.id.text2},
                 0);
+
 
         mSimpleCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
             @Override
@@ -76,6 +112,8 @@ public class NewTransactionActivity extends AppCompatActivity implements
                 return name;
             }
         });
+
+
 
           searchContactsTextView.setAdapter(mSimpleCursorAdapter);
           getSupportLoaderManager().initLoader(FILTERED_CONTACTS_LIST_LOADER_ID, null, this);
@@ -94,6 +132,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
             @Override
             public void afterTextChanged(Editable s) {
+
 
 
             }

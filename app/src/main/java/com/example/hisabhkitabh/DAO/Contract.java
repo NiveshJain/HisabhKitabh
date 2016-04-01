@@ -31,8 +31,6 @@ public class Contract  {
 
         public  static final String TABLE_NAME = "users";
 
-        public  static final String _ID = "user_id";
-
         public  static final String COLUMN_FIRST_NAME = "first_name";
 
         public  static final String COLUMN_LAST_NAME = "last_name";

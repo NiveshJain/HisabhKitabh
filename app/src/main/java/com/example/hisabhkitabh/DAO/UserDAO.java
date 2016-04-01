@@ -51,6 +51,18 @@ public class UserDAO {
         return userList;
     }
 
-
+public User getFirstUser (Context context){
+    User firstUser = new User();
+    String sql = "SELECT * from " +
+            Contract.Users.TABLE_NAME + " where " +
+            Contract.Users._ID +
+            "=1;";
+    Cursor cursor =  DBHelper.getInstance(context).getReadableDatabase().rawQuery(sql,null);
+    cursor.moveToFirst();
+    firstUser.setFirstName(cursor.getString(cursor.getColumnIndex(Contract.Users.COLUMN_FIRST_NAME)));
+    firstUser.setLastName(cursor.getString(cursor.getColumnIndex(Contract.Users.COLUMN_LAST_NAME)));
+    firstUser.setContactNumber(Long.parseLong(cursor.getString(cursor.getColumnIndex(Contract.Users.COLUMN_CONTACT_NUMBER))));
+    return firstUser;
+}
 
 }

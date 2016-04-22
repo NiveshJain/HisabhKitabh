@@ -211,6 +211,5 @@ public class NewTransactionActivity extends AppCompatActivity implements
     public void addTransaction(MenuItem item) {
 
 
-
     }
 }

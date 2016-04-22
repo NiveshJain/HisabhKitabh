@@ -8,13 +8,13 @@ public class EventParticipants {
     private User lender ;
     private User borrower;
     private double amount ;
-    private Event event ;
 
-    public EventParticipants(User lender, User borrower, double amount, Event event) {
+
+    public EventParticipants(User lender, User borrower, double amount) {
         this.lender = lender;
         this.borrower = borrower;
         this.amount = amount;
-        this.event = event;
+
     }
 
     public User getLender() {
@@ -41,11 +41,5 @@ public class EventParticipants {
         this.amount = amount;
     }
 
-    public Event getEvent() {
-        return event;
-    }
 
-    public void setEvent(Event event) {
-        this.event = event;
-    }
 }

@@ -18,12 +18,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.hisabhkitabh.DAO.EventDAO;
+import com.example.hisabhkitabh.DAO.EventParticipantsDAO;
 import com.example.hisabhkitabh.DAO.UserDAO;
+import com.example.hisabhkitabh.Model.Event;
+import com.example.hisabhkitabh.Model.EventParticipants;
 import com.example.hisabhkitabh.Model.User;
 import com.example.hisabhkitabh.R;
 import com.example.hisabhkitabh.fragment.DateChooserFragment;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by LNJPC on 19-02-2016.
@@ -35,8 +46,11 @@ public class NewTransactionActivity extends AppCompatActivity implements
     private static final int CONTACTS_LIST_LOADER_ID = 0;
     private static final int FILTERED_CONTACTS_LIST_LOADER_ID = 1;
     private static String name = "";
+    private static  ArrayList<String> arrayList = new ArrayList<>();
+    private User mNewuser ;
+    private static User PrimeUser;
 
-
+    private static Spinner SPINNER ;
     SimpleCursorAdapter mSimpleCursorAdapter ;
 
     @Override
@@ -44,9 +58,10 @@ public class NewTransactionActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.newtransaction_layout);
+        SPINNER = (Spinner)findViewById(R.id.spinner);
 
          Toolbar toolbar = (Toolbar) findViewById(R.id.transaction_toolbar);
-        setSupportActionBar(toolbar);
+            setSupportActionBar(toolbar);
 
          final AutoCompleteTextView searchContactsTextView = (AutoCompleteTextView) findViewById(R.id.searchContactsTextView);
          searchContactsTextView.setThreshold(2);
@@ -66,42 +81,41 @@ public class NewTransactionActivity extends AppCompatActivity implements
         }
 
         //getting the name of the person with whom our App user transacted
-        final String[] secondUser = new String[] {""};
+
         searchContactsTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                secondUser[0] = (String) mSimpleCursorAdapter.getItem(position);
+                String secondUser = searchContactsTextView.getText().toString();
+                String [] name =  secondUser.split(" ");
+                mNewuser = new User();
+                mNewuser.setFirstName(name[0]);
+                mNewuser.setLastName(name[1]);
+                setSpinner(secondUser,SPINNER);
             }
         });
 
+        setSpinner(null,SPINNER);
+
         // Getting our App first user info.
-        final User[] firstUser = new User[1];
         new Thread(new Runnable() {
             @Override
             public void run() {
-                 firstUser[0] = new UserDAO().getFirstUser(mContext);
+                 PrimeUser = new UserDAO().getFirstUser(mContext);
+
             }
         }).start();
 
-        //Initializig Spinner
 
-       ArrayAdapter<String> arrayAdapter =   new ArrayAdapter<String>(mContext,
-            android.R.layout.simple_expandable_list_item_1,
-            android.R.id.text1,
-            new String [] {"You Owe",secondUser[0],"Split Equally"});
 
-        ((Spinner)findViewById(R.id.spinner)).setAdapter(arrayAdapter);
-
-        final String [] COLUMNS_PROJECTION = new  String  [] {ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.Contacts._ID} ;
+        final String [] COLUMNS_PROJECTION = new  String  [] {ContactsContract.Contacts.DISPLAY_NAME} ;
 
 
 
       mSimpleCursorAdapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_2,
+                android.R.layout.simple_list_item_1,
                 null,
                 COLUMNS_PROJECTION,
-                new int [] {android.R.id.text1,android.R.id.text2},
+                new int [] {android.R.id.text1},
                 0);
 
 
@@ -112,8 +126,6 @@ public class NewTransactionActivity extends AppCompatActivity implements
                 return name;
             }
         });
-
-
 
           searchContactsTextView.setAdapter(mSimpleCursorAdapter);
           getSupportLoaderManager().initLoader(FILTERED_CONTACTS_LIST_LOADER_ID, null, this);
@@ -140,10 +152,40 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
     }
 
+
+ public void setSpinner (String secondUser,Spinner spinner){
+     if(secondUser !=null){
+         arrayList.clear();
+         arrayList.add(secondUser+ " Owes You Full");
+         arrayList.add("You Owes full");
+         arrayList.add("Split Equally");
+         ArrayAdapter<String> arrayAdapter =   new ArrayAdapter<String>(mContext,
+                 android.R.layout.simple_expandable_list_item_1,
+                 android.R.id.text1,
+                 arrayList);
+
+         spinner.setAdapter(arrayAdapter);
+
+     }
+     else {
+         arrayList.clear();
+         arrayList.add("You Owes full");
+         arrayList.add("Split Equally");
+         ArrayAdapter<String> arrayAdapter =   new ArrayAdapter<String>(mContext,
+                 android.R.layout.simple_expandable_list_item_1,
+                 android.R.id.text1,
+                 arrayList);
+
+         spinner.setAdapter(arrayAdapter);
+
+     }
+
+ }
+
     private void filterCursor(CharSequence query ) {
         Bundle bundle = new Bundle ();
         bundle.putCharSequence("newQuery", query);
-        getSupportLoaderManager().restartLoader(FILTERED_CONTACTS_LIST_LOADER_ID, bundle, this);
+        getSupportLoaderManager().restartLoader(CONTACTS_LIST_LOADER_ID, bundle, this);
     }
 
 
@@ -163,12 +205,17 @@ public class NewTransactionActivity extends AppCompatActivity implements
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+
         switch (id) {
 
+
             case (FILTERED_CONTACTS_LIST_LOADER_ID) :
+
                 if(args != null) {
+
                     String query = args.getCharSequence("newQuery").toString();
                     String select = ContactsContract.Contacts.DISPLAY_NAME + " LIKE +'" + query + "%'";
+
                     return new CursorLoader(this,
                             ContactsContract.Contacts.CONTENT_URI,
                             CONTACTS_SUMMARY_PROJECTION,
@@ -185,7 +232,15 @@ public class NewTransactionActivity extends AppCompatActivity implements
                         ContactsContract.Contacts.DISPLAY_NAME + " ASC");
 
             default:
-                return null;
+                String query_ = args.getCharSequence("newQuery").toString();
+                String select_ = ContactsContract.Contacts.DISPLAY_NAME + " LIKE +'" + query_ + "%'";
+
+                return new CursorLoader(this,
+                        ContactsContract.Contacts.CONTENT_URI,
+                        CONTACTS_SUMMARY_PROJECTION,
+                        select_,
+                        null,
+                        ContactsContract.Contacts.DISPLAY_NAME + " ASC");
         }
 
     }
@@ -206,10 +261,66 @@ public class NewTransactionActivity extends AppCompatActivity implements
         DialogFragment dialogFragment = new DateChooserFragment();
         dialogFragment.show(getFragmentManager(),"R.string.date_fragment_tag");
 
+
     }
 
     public void addTransaction(MenuItem item) {
 
 
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Event event ;
+                    EventDAO eventDAO = new EventDAO() ;
+                    String description =  ((EditText)findViewById(R.id.description)).getText().toString();
+                    SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("dd/MMM/yyyy");
+
+                    Date date = null;
+
+                    try {
+
+                      String test =   ((Button)findViewById(R.id.date_fragment)).getText().toString();
+                        date = new Date(simpleDateFormat.parse(((Button)findViewById(R.id.date_fragment)).getText().toString()).getTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    event = new Event(date,description);
+
+                    eventDAO.insertEvent(event,mContext);
+                }
+            }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                UserDAO userDAO = new UserDAO();
+                userDAO.insertUser(mNewuser,mContext);
+
+                EventParticipants eventParticipants ;
+                EventParticipantsDAO eventParticipantsDAO = new EventParticipantsDAO();
+                double amount =  Double.parseDouble(((EditText)findViewById(R.id.amount)).getText().toString());
+                eventParticipants = getEventParticipantsObject(SPINNER.getSelectedItemPosition(),amount);
+                eventParticipantsDAO.insertEventParticipants(eventParticipants,mContext);
+            }
+        }).start();
+
     }
+
+    public EventParticipants getEventParticipantsObject (int position,double amount ){
+
+        switch (position) {
+
+            case 0:
+                return new EventParticipants(PrimeUser,mNewuser,amount);
+
+            case 1:
+                return new EventParticipants(mNewuser,PrimeUser,amount);
+
+          default:
+              return null;
+        }
+
+    }
+
+
 }

@@ -51,8 +51,8 @@ public class ContactsListFragment extends ListFragment {
 
 
         @Override
-        protected ArrayList<User> doInBackground(Activity... params) {
 
+        protected ArrayList<User> doInBackground(Activity... params) {
 
             if (params[0] == null) {
                 Log.e("NULL**", "null arraylist");
@@ -69,7 +69,8 @@ public class ContactsListFragment extends ListFragment {
             super.onPostExecute(users);
             if (!users.isEmpty()) {
                User [] names = users.toArray( new User [users.size()]);
-                ArrayAdapter arrayAdapter = new ArrayAdapter<User>(getContext(), R.layout.contact_item_layout, R.id.name, names);
+
+                ArrayAdapter arrayAdapter = new ArrayAdapter<User>(getContext(), R.layout.contact_item_layout, R.id.name, users);
                 setListAdapter(arrayAdapter);
             } else {
 

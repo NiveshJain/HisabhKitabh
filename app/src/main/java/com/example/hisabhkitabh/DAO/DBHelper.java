@@ -32,13 +32,13 @@ public class DBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_USERS_TABLE = "CREATE TABLE " + Contract.Users.TABLE_NAME + " (" +
                 Contract.Users._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Contract.Users.COLUMN_FIRST_NAME + " TEXT NOT NULL," +
-                Contract.Users.COLUMN_LAST_NAME + " TEXT NOT NULL," +
-                Contract.Users.COLUMN_CONTACT_NUMBER + " INTEGER NOT NULL UNIQUE" +
+                Contract.Users.COLUMN_LAST_NAME + " TEXT  NULL," +
+                Contract.Users.COLUMN_CONTACT_NUMBER + " INTEGER NULL UNIQUE" +
                 ");" ;
 
         final String SQL_CREATE_Event_PARTICIPANTS_TABLE = "CREATE TABLE "
                 + Contract.EventPraticipants.TABLE_NAME + " (" +
-                Contract.EventPraticipants.COLUMN_TID + " INTEGER," +
+                Contract.EventPraticipants.COLUMN_TID + " INTEGER ," +
                 Contract.EventPraticipants.COLUMN_FROM + " TEXT NOT NULL," +
                 Contract.EventPraticipants.COLUMN_TO + " TEXT NOT NULL," +
                 Contract.EventPraticipants.COLUMN_AMOUNT + " REAL NOT NULL, " +

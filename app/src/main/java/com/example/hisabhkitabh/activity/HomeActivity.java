@@ -144,7 +144,6 @@ public class HomeActivity extends AppCompatActivity{
 
     public void addNewTransaction(View view) {
 
-
         startActivity(new Intent().setAction(CUSTOM_ACTION));
 
     }

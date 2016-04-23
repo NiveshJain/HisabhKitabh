@@ -23,7 +23,7 @@ public class UserDAO {
         userValues.put(Contract.Users.COLUMN_CONTACT_NUMBER,user.getContactNumber());
 
         SQLiteDatabase db =  DBHelper.getInstance(context).getWritableDatabase();
-        return db.insertWithOnConflict(Contract.Users.TABLE_NAME,null,userValues,SQLiteDatabase.CONFLICT_IGNORE);
+        return db.insert(Contract.Users.TABLE_NAME,null,userValues);
 
     }
 

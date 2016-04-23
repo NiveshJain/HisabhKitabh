@@ -67,10 +67,20 @@ public class ContactsListFragment extends ListFragment {
         @Override
         protected void onPostExecute(ArrayList<User> users) {
             super.onPostExecute(users);
-            if (!users.isEmpty()) {
-               User [] names = users.toArray( new User [users.size()]);
 
-                ArrayAdapter arrayAdapter = new ArrayAdapter<User>(getContext(), R.layout.contact_item_layout, R.id.name, users);
+            if (!users.isEmpty()) {
+               User [] userArray = users.toArray( new User [users.size()]);
+                String [] names = new String [userArray.length] ;
+                for (int i =0;i<userArray.length;i++){
+                    if(userArray[i].getLastName()!=null){
+                        names[i] = userArray[i].getFirstName()+" "+userArray[i].getLastName();
+                    }
+                    else{
+                        names[i] = userArray[i].getFirstName();
+                    }
+
+                }
+                ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.contact_item_layout, R.id.name,names);
                 setListAdapter(arrayAdapter);
             } else {
 

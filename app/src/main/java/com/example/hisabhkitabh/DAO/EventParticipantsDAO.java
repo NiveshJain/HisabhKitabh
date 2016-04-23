@@ -20,7 +20,7 @@ public class EventParticipantsDAO {
 
 
         SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
-        return db.insertWithOnConflict(Contract.Event.TABLE_NAME,null,participants,SQLiteDatabase.CONFLICT_IGNORE);
+        return db.insertWithOnConflict(Contract.EventPraticipants.TABLE_NAME,null,participants,SQLiteDatabase.CONFLICT_IGNORE);
     }
 
 }

@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -21,6 +24,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.hisabhkitabh.DAO.EventDAO;
 import com.example.hisabhkitabh.DAO.EventParticipantsDAO;
@@ -49,16 +53,31 @@ public class NewTransactionActivity extends AppCompatActivity implements
     private static  ArrayList<String> arrayList = new ArrayList<>();
     private User mNewuser ;
     private static User PrimeUser;
-
     private static Spinner SPINNER ;
-    SimpleCursorAdapter mSimpleCursorAdapter ;
+    private Handler mHandler;
+    private SimpleCursorAdapter mSimpleCursorAdapter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this;
+        mContext = NewTransactionActivity.this;
         setContentView(R.layout.newtransaction_layout);
         SPINNER = (Spinner)findViewById(R.id.spinner);
+        mHandler = new Handler(Looper.getMainLooper()){
+
+            @Override
+            public void handleMessage(Message msg) {
+
+                if(msg.what == 3){
+                    Toast.makeText(NewTransactionActivity.this, "Transaction Added", Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    Toast.makeText(NewTransactionActivity.this, "Transaction Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
 
          Toolbar toolbar = (Toolbar) findViewById(R.id.transaction_toolbar);
             setSupportActionBar(toolbar);
@@ -266,45 +285,52 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
     public void addTransaction(MenuItem item) {
 
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Event event ;
-                    EventDAO eventDAO = new EventDAO() ;
-                    String description =  ((EditText)findViewById(R.id.description)).getText().toString();
-                    SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("dd/MMM/yyyy");
-
-                    Date date = null;
-
-                    try {
-
-                      String test =   ((Button)findViewById(R.id.date_fragment)).getText().toString();
-                        date = new Date(simpleDateFormat.parse(((Button)findViewById(R.id.date_fragment)).getText().toString()).getTime());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    event = new Event(date,description);
-
-                    eventDAO.insertEvent(event,mContext);
-                }
-            }).start();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Event event ;
+                int flag = 0;
+                EventDAO eventDAO = new EventDAO() ;
+                String description =  ((EditText)findViewById(R.id.description)).getText().toString();
+                SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("dd MMM,yyyy");
+
+                Date date = null;
+
+                try {
+
+                    date = new Date(simpleDateFormat.parse(((Button)findViewById(R.id.date_fragment)).getText().toString()).getTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                event = new Event(date,description);
+
+               if(eventDAO.insertEvent(event,mContext)!=-1) {
+                   flag++;
+               }
+
                 UserDAO userDAO = new UserDAO();
-                userDAO.insertUser(mNewuser,mContext);
+               if(userDAO.insertUser(mNewuser,mContext)!= -1) {
+                   flag++;
+               }
 
                 EventParticipants eventParticipants ;
                 EventParticipantsDAO eventParticipantsDAO = new EventParticipantsDAO();
                 double amount =  Double.parseDouble(((EditText)findViewById(R.id.amount)).getText().toString());
                 eventParticipants = getEventParticipantsObject(SPINNER.getSelectedItemPosition(),amount);
-                eventParticipantsDAO.insertEventParticipants(eventParticipants,mContext);
+                if(eventParticipantsDAO.insertEventParticipants(eventParticipants,mContext)!=-1){
+                    ++flag;
+                }
+
+                Message message = mHandler.obtainMessage(flag);
+                message.sendToTarget();
+
             }
         }).start();
 
-    }
+            }
+
+
+
 
     public EventParticipants getEventParticipantsObject (int position,double amount ){
 

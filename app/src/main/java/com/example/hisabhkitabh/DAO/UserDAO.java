@@ -18,9 +18,11 @@ public class UserDAO {
     public long insertUser(User user,Context context){
 
         ContentValues userValues = new ContentValues();
-        userValues.put(Contract.Users.COLUMN_FIRST_NAME,user.getFirstName());
-        userValues.put(Contract.Users.COLUMN_LAST_NAME,user.getLastName());
-        userValues.put(Contract.Users.COLUMN_CONTACT_NUMBER,user.getContactNumber());
+
+            userValues.put(Contract.Users.COLUMN_FIRST_NAME, user.getFirstName());
+            userValues.put(Contract.Users.COLUMN_CONTACT_NUMBER, user.getContactNumber());
+            userValues.put(Contract.Users.COLUMN_LAST_NAME, user.getLastName());
+
 
         SQLiteDatabase db =  DBHelper.getInstance(context).getWritableDatabase();
         return db.insert(Contract.Users.TABLE_NAME,null,userValues);

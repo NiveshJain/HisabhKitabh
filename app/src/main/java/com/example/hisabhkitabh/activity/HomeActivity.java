@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity{
 
     private TabLayout setTabs() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Contancts"));
+        tabLayout.addTab(tabLayout.newTab().setText("List"));
         tabLayout.addTab(tabLayout.newTab().setText("Groups"));
         tabLayout.addTab(tabLayout.newTab().setText("Reports"));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
@@ -176,7 +176,12 @@ public class HomeActivity extends AppCompatActivity{
         }
     }
 
+   void  refreshTransactionList (View view){
+      ContactsListFragment contactsListFragment = new ContactsListFragment();
+        ContactsListFragment.Contacts contacts = contactsListFragment.new Contacts();
+       contacts.execute(this);
 
+   }
 
 
 }

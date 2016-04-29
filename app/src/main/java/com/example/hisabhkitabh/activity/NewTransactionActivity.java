@@ -1,5 +1,6 @@
 package com.example.hisabhkitabh.activity;
 
+import android.annotation.TargetApi;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.database.Cursor;
@@ -49,7 +50,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
     private static Context mContext;
     private static final int CONTACTS_LIST_LOADER_ID = 0;
     private static final int FILTERED_CONTACTS_LIST_LOADER_ID = 1;
-    private static String name = "";
+
     private static  ArrayList<String> arrayList = new ArrayList<>();
     private User mNewuser ;
     private static User PrimeUser;
@@ -57,6 +58,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
     private Handler mHandler;
     private SimpleCursorAdapter mSimpleCursorAdapter ;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,9 +93,12 @@ public class NewTransactionActivity extends AppCompatActivity implements
             searchContactsTextView.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-                  name =  ((AutoCompleteTextView) findViewById(R.id.searchContactsTextView)).getText().toString();
+                 String name =  ((AutoCompleteTextView) findViewById(R.id.searchContactsTextView)).getText().toString();
                     if (name !=null) {
-
+                        setSecondUser(name);
+                    }
+                    else{
+                        searchContactsTextView.setError("Enter the name");
                     }
                 }
             });
@@ -105,15 +110,11 @@ public class NewTransactionActivity extends AppCompatActivity implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String secondUser = searchContactsTextView.getText().toString();
-                String [] name =  secondUser.split(" ");
-                mNewuser = new User();
-                mNewuser.setFirstName(name[0]);
-                mNewuser.setLastName(name[1]);
-                setSpinner(secondUser,SPINNER);
+                setSecondUser(secondUser);
+
             }
         });
 
-        setSpinner(null,SPINNER);
 
         // Getting our App first user info.
         new Thread(new Runnable() {
@@ -141,7 +142,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
         mSimpleCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
             @Override
             public CharSequence convertToString(Cursor cursor) {
-                name =   cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+              String  name =   cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 return name;
             }
         });
@@ -172,12 +173,29 @@ public class NewTransactionActivity extends AppCompatActivity implements
     }
 
 
+
+    public void setSecondUser (String secondUser){
+
+        String [] name =  secondUser.split(" ");
+        mNewuser = new User();
+        mNewuser.setFirstName(name[0]);
+        if(name.length >1){
+            mNewuser.setLastName(name[1]);
+            setSpinner(secondUser, SPINNER);
+        }
+        else {
+            setSpinner(secondUser,SPINNER);
+        }
+
+
+    }
+
+
  public void setSpinner (String secondUser,Spinner spinner){
      if(secondUser !=null){
          arrayList.clear();
          arrayList.add(secondUser+ " Owes You Full");
          arrayList.add("You Owes full");
-         arrayList.add("Split Equally");
          ArrayAdapter<String> arrayAdapter =   new ArrayAdapter<String>(mContext,
                  android.R.layout.simple_expandable_list_item_1,
                  android.R.id.text1,
@@ -189,7 +207,6 @@ public class NewTransactionActivity extends AppCompatActivity implements
      else {
          arrayList.clear();
          arrayList.add("You Owes full");
-         arrayList.add("Split Equally");
          ArrayAdapter<String> arrayAdapter =   new ArrayAdapter<String>(mContext,
                  android.R.layout.simple_expandable_list_item_1,
                  android.R.id.text1,
@@ -316,7 +333,7 @@ public class NewTransactionActivity extends AppCompatActivity implements
                 EventParticipants eventParticipants ;
                 EventParticipantsDAO eventParticipantsDAO = new EventParticipantsDAO();
                 double amount =  Double.parseDouble(((EditText)findViewById(R.id.amount)).getText().toString());
-                eventParticipants = getEventParticipantsObject(SPINNER.getSelectedItemPosition(),amount);
+                eventParticipants = classfifyEventParticipants(SPINNER.getSelectedItemPosition(),amount);
                 if(eventParticipantsDAO.insertEventParticipants(eventParticipants,mContext)!=-1){
                     ++flag;
                 }
@@ -326,13 +343,15 @@ public class NewTransactionActivity extends AppCompatActivity implements
 
             }
         }).start();
-
-            }
-
+        this.finish();
 
 
+    }
 
-    public EventParticipants getEventParticipantsObject (int position,double amount ){
+
+
+
+    public EventParticipants classfifyEventParticipants (int position,double amount ){
 
         switch (position) {
 

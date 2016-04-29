@@ -4,7 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="dialog_heading">Basic Info</string>
-    <string name="Username">Username</string>
+    <string name="Username">FirstName LastName</string>
     <string name="ContactNumber">Contact Number</string>
     <string name="dialogbutton1">OK</string>
     <string name="dialogbutton2">Cancel</string>
@@ -29,6 +29,7 @@
     <string name="date_fragment_tag">dialogfragment</string>
     <string name="textOnACTV">With you and:</string>
     <string name="DefaultMessage">With you and:</string>
+    <string name="owes">Owes</string>
 
 
     <string-array name="distribution">

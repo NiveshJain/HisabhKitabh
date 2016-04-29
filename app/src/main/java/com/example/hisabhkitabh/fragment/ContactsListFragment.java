@@ -1,6 +1,8 @@
 package com.example.hisabhkitabh.fragment;
 
 import android.app.Activity;
+import android.content.Context;
+import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.TextView;
 
-import com.example.hisabhkitabh.DAO.UserDAO;
-import com.example.hisabhkitabh.Model.User;
+import com.example.hisabhkitabh.DAO.EventParticipantsDAO;
+import com.example.hisabhkitabh.Model.EventParticipants;
 import com.example.hisabhkitabh.R;
 
 import java.util.ArrayList;
@@ -23,9 +26,12 @@ import java.util.ArrayList;
  */
 public class ContactsListFragment extends ListFragment {
 
-    private UserDAO mUsersDAO;
-    private Activity mActivity;
+    private EventParticipantsDAO mEventParticipatsDAO;
+    private Context mContext;
 
+    public Context getContext (){
+        return mContext;
+    }
 
     public ContactsListFragment() {
 
@@ -34,60 +40,139 @@ public class ContactsListFragment extends ListFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        new Contacts().execute(getActivity());
         return inflater.inflate(R.layout.contacts_list, container, false);
+
 
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new Contacts().execute(getActivity());
+
     }
 
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context ;
+    }
 
-    public class Contacts extends AsyncTask<Activity, Void, ArrayList<User>> {
+    public  class Contacts extends AsyncTask<Activity, Void, ArrayList<EventParticipants>> {
 
 
         @Override
 
-        protected ArrayList<User> doInBackground(Activity... params) {
+        protected ArrayList<EventParticipants> doInBackground(Activity... params) {
 
             if (params[0] == null) {
                 Log.e("NULL**", "null arraylist");
                 return null;
             } else {
-                mUsersDAO = new UserDAO();
-                return mUsersDAO.getAllUsers(params[0]);
+               mEventParticipatsDAO = new EventParticipantsDAO();
+                return mEventParticipatsDAO.getAllTransactions(params[0]);
             }
 
         }
 
         @Override
-        protected void onPostExecute(ArrayList<User> users) {
-            super.onPostExecute(users);
+        protected void onPostExecute(ArrayList<EventParticipants> eventParticipantsList) {
 
-            if (!users.isEmpty()) {
-               User [] userArray = users.toArray( new User [users.size()]);
-                String [] names = new String [userArray.length] ;
-                for (int i =0;i<userArray.length;i++){
-                    if(userArray[i].getLastName()!=null){
-                        names[i] = userArray[i].getFirstName()+" "+userArray[i].getLastName();
-                    }
-                    else{
-                        names[i] = userArray[i].getFirstName();
-                    }
-
-                }
-                ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.contact_item_layout, R.id.name,names);
-                setListAdapter(arrayAdapter);
-            } else {
-
+            if (!eventParticipantsList.isEmpty()) {
+                TransactionArrayAdapter transactionArrayAdapter = new TransactionArrayAdapter(eventParticipantsList);
+                setListAdapter(transactionArrayAdapter);
             }
         }
     }
 
+
+    public   class TransactionArrayAdapter implements ListAdapter {
+
+        private  ArrayList<EventParticipants> mEventParticipantsList ;
+
+        public TransactionArrayAdapter(ArrayList<EventParticipants> arrayList) {
+
+            mEventParticipantsList = arrayList;
+        }
+
+        public ArrayList<EventParticipants> getEventParticipantsList (){
+            return mEventParticipantsList;
+        }
+
+        @Override
+        public boolean areAllItemsEnabled() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return true;
+        }
+
+        @Override
+        public void registerDataSetObserver(DataSetObserver observer) {
+
+
+        }
+
+        @Override
+        public void unregisterDataSetObserver(DataSetObserver observer) {
+
+        }
+
+        @Override
+        public int getCount() {
+            return mEventParticipantsList.size();
+        }
+
+
+        @Override
+        public Object getItem(int position) {
+            return mEventParticipantsList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+           if(convertView == null){
+               LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+              convertView =  layoutInflater.inflate(R.layout.contact_item_layout,parent,false);
+
+           }
+
+
+            ((TextView)convertView.findViewById(R.id.borrower)).setText(mEventParticipantsList.get(position).getBorrower().getFirstName());
+            ((TextView)convertView.findViewById(R.id.lender)).setText(mEventParticipantsList.get(position).getLender().getFirstName());
+            ((TextView)convertView.findViewById(R.id.money)).setText(String.valueOf(mEventParticipantsList.get(position).getAmount()));
+
+            return  convertView;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return 1;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 1;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return false;
+        }
+    }
 
 }
 

@@ -3,51 +3,69 @@
     <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:orientation="horizontal"
+        android:background="#E3F2FD"
         android:layout_margin="5dp"
-        android:weightSum="3">
+        android:weightSum="4">
 
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_gravity="center"
             android:id="@+id/pic"
             android:src="@drawable/wallet" />
 
     <TextView
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:id="@+id/name"
-        android:text="@string/Username"
+        android:id="@+id/borrower"
+        android:layout_gravity="center"
         android:textColor="@color/black_textColor"
         android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:textSize="18sp"
-        android:layout_weight="5.52" />
+        android:paddingLeft="5dp"
+        android:textSize="15sp"
+        android:layout_weight="2"/>
+
+    <TextView
+        android:id="@+id/oweParticipants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/owes"
+        android:textSize="14sp"
+        android:textColor="@android:color/holo_red_light"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:paddingRight="4dp"/>
 
     <LinearLayout
-        android:layout_width="120dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginRight="2dp"
-        android:layout_weight="0.8">
+        android:layout_marginRight="5dp"
+        android:weightSum="2"
+        android:layout_weight="2">
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/no"
+        android:layout_height="0dp"
+        android:id="@+id/lender"
+        android:layout_gravity="center"
+        android:layout_weight="1"
         android:textColor="@color/black_textColor"
-        android:layout_marginTop="10dp"
-        android:text="owes ??"
-        android:textSize="18sp" />
+        android:layout_marginTop="2dp"
+        android:textSize="15sp" />
 
     <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:id="@+id/money"
-            android:textColor="@color/black_textColor"
-            android:text="money"/>
+             android:textSize="13sp"
+            android:layout_gravity="center"
+            android:textColor="@color/black_textColor" />
 
      </LinearLayout>
+
 </LinearLayout>
 
